@@ -53,7 +53,7 @@ categorical_vars = c("gender", "ever_married", "work_type",
 data = data %>% mutate(across(all_of(categorical_vars),~as.numeric(as.factor(.))-1))
 ```
 
-## Convert categorival variables to factors
+## Convert categorical variables to factors
 ```{r message=FALSE, warning=FALSE}
 data[categorical_vars] = lapply(data[categorical_vars], as.factor)
 
@@ -63,7 +63,7 @@ data$bmi = as.numeric(data$bmi)
 data = drop_na(data)
 ```
 
-## Remove umnecessary columns
+## Remove unnecessary columns
 ```{r message=FALSE, warning=FALSE}
 data$id = NULL
 ```
@@ -74,7 +74,7 @@ data$stroke = ifelse(data$stroke == 0, "No", "Yes")
 data$stroke = as.factor(data$stroke)
 ```
 
-## Checking the distribution of the study Outcome.
+## Checking the distribution of the study outcome
 ```{r message=FALSE, warning=FALSE}
 table(data$stroke)#There is a class imbalance
 ```
@@ -92,12 +92,12 @@ boruta_results = Boruta(Class~., data)
 print(boruta_results)
 ```
 
-## To Check only the confirmed attributes
+## To check only the confirmed attributes
 ```{r message=FALSE, warning=FALSE}
 getSelectedAttributes(boruta_results, withTentative = TRUE)
 ```
 
-## Remove the rejected Attributes
+## Remove the rejected attributes
 ```{r message=FALSE, warning=FALSE}
 data$gender = NULL
 data$Residence_type = NULL
@@ -191,14 +191,14 @@ Cm2 = confusionMatrix(rf_pred, testData$Class,
 Cm2
 ```
 
-## ROc curve
+## ROC curve
 ```{r message=FALSE, warning=FALSE}
 rocpred1 = predict(model_rf,testData,
                    type = "prob")
 roc(testData$Class,rocpred1$Yes)
 ```
 
-## Implement the Support vector machines
+## Implement the support vector machines
 ```{r message=FALSE, warning=FALSE}
 model_svm = train(Class~., 
                   train_data,
@@ -208,7 +208,7 @@ model_svm = train(Class~.,
                   trControl = fitcontrol)
 ```
 
-## Make Predictions
+## Make predictions
 ```{r message=FALSE, warning=FALSE}
 pred3 = predict(model_svm, testData)
 cm3 = confusionMatrix(pred3, testData$Class, positive = "Yes")
@@ -221,7 +221,7 @@ rocpred2 = predict(model_svm, testData, type = "prob")
 roc(testData$Class, rocpred2$Yes)
 ```
 
-## Implement the K-Nearest Neighbors
+## Implement the K-Nearest neighbors
 ```{r message=FALSE, warning=FALSE}
 model_knn = train(Class~., 
                   train_data,
@@ -231,14 +231,14 @@ model_knn = train(Class~.,
                   trControl = fitcontrol)
 ```
 
-## Making Predictions
+## Making predictions
 ```{r message=FALSE, warning=FALSE}
 pred4 = predict(model_knn, testData)
 cm4 = confusionMatrix(testData$Class, pred4, positive = "Yes")
 cm4
 ```
 
-## ROC Curve
+## ROC curve
 ```{r message=FALSE, warning=FALSE}
 rocpred3 = predict(model_knn, testData, type = "prob")
 roc(testData$Class, rocpred3$Yes)
@@ -254,20 +254,20 @@ model_gbm = train(Class~.,
                   trControl = fitcontrol)
 ```
 
-## Making Predictions
+## Making predictions
 ```{r message=FALSE, warning=FALSE}
 pred5 = predict(model_gbm, testData)
 cm5 = confusionMatrix(testData$Class, pred5, positive = "Yes")
 cm5
 ```
 
-## ROC CURVE
+## ROC curve
 ```{r message=FALSE, warning=FALSE}
 rocpred4 = predict(model, testData, type = "prob")
 roc(testData$Class, rocpred4$Yes)
 ```
 
-## Implementing Neural Networks
+## Implementing neural networks
 ```{r message=FALSE, warning=FALSE}
 model_neuro = train(Class~., 
                     train_data,
@@ -277,20 +277,20 @@ model_neuro = train(Class~.,
                     trControl = fitcontrol)
 ```
 
-## Making Predictions
+## Making predictions
 ```{r message=FALSE, warning=FALSE}
 pred6 = predict(model_neuro, testData)
 cm6 = confusionMatrix(testData$Class, pred6, positive = "Yes")
 cm
 ```
 
-## ROC Curve
+## ROC curve
 ```{r message=FALSE, warning=FALSE}
 rocpred5 = predict(model_neuro, testData, type = "prob")
 roc(testData$Class, rocpred5$Yes)
 ```
 
-## Model Comparison
+## Model comparison
 ```{r message=FALSE, warning=FALSE}
 model_list <- list(Logistic = model, Neural_Networks = model_neuro , 
                    Decision_Trees = model_rpart, Random.Forest = model_rf,
@@ -303,4 +303,3 @@ bwplot(resamples, metric="ROC")
 ```{r message=FALSE, warning=FALSE}
 saveRDS(model_neuro, "C:/Users/ADMIN/Desktop/Stroke/neuro_networks.model.rds")
 ```
-
